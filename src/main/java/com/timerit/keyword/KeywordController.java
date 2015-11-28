@@ -1,5 +1,7 @@
 package com.timerit.keyword;
 
+import com.timerit.commons.ErrorResponse;
+import com.timerit.device.DeviceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,10 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -24,6 +23,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * Created by trpgm on 2015-11-28.
  */
 @RestController
+@RequestMapping("/api")
 public class KeywordController {
     @Autowired
     private KeywordService service;
@@ -70,5 +70,14 @@ public class KeywordController {
     public ResponseEntity deleteKeyword(@PathVariable Long id) {
         service.deleteKeyword(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler(DeviceNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleDeviceNotFoundException(DeviceNotFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("[" + e.getId() + "] 존재하지 않는 디바이스입니다.");
+        errorResponse.setCode("device.id.exception");
+        return errorResponse;
     }
 }

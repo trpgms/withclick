@@ -1,5 +1,6 @@
 package com.timerit.device;
 
+import com.timerit.Search.Search;
 import com.timerit.accounts.Account;
 
 import com.timerit.keyword.Keyword;
@@ -39,4 +40,7 @@ public class Device {
 
     @OneToMany(mappedBy="device")
     private List<Keyword> keywords;
+
+    @OneToMany(mappedBy="device")
+    private List<Search> searches;
 }

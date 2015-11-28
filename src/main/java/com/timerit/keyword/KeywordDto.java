@@ -4,6 +4,8 @@ import com.timerit.device.Device;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
+
 
 /**
  * Created by trpgm on 2015-11-28.
@@ -12,29 +14,31 @@ public class KeywordDto {
     @Data
     public static class Create {
         @NotBlank
-        private String keyword;
+        private String searchword;
         @NotBlank
         private String url;
-
-        private Integer termsec;
-
-        private Integer priority;
+        @NotNull
+        private Integer waitopen;
+        @NotNull
+        private Integer waitsearch;
 
         private String description;
-        @NotBlank
+        @NotNull
         private Long deviceid;
     }
     @Data
     public static class Response {
         private Long id;
 
-        private String keyword;
+        private String searchword;
 
         private String url;
 
         private Integer priority;
 
-        private Integer termsec;
+        private Integer waitopen;
+
+        private Integer waitsearch;
 
         private String description;
 
@@ -44,13 +48,15 @@ public class KeywordDto {
     @Data
     public static class Update {
         @NotBlank
-        private String keyword;
+        private String searchword;
         @NotBlank
         private String url;
         @NotBlank
         private Integer priority;
         @NotBlank
-        private Integer termsec;
+        private Integer waitopen;
+        @NotBlank
+        private Integer waitsearch;
 
         private String description;
     }

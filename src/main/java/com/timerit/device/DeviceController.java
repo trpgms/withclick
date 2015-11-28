@@ -27,6 +27,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 
 @RestController
+@RequestMapping("/api")
 public class DeviceController {
     @Autowired
     private DeviceService service;

@@ -29,7 +29,10 @@ public class AccountDto {
     public static class Response {
         private Long id;
         private String username;
-        private String fullName;
+        private String email;
+        private String description;
+        private String status;
+        private boolean admin;
         private Date joined;
         private Date updated;
     }
@@ -40,5 +43,6 @@ public class AccountDto {
         private String description;
         private String status;
         private String email;
+        private boolean admin;
     }
 }

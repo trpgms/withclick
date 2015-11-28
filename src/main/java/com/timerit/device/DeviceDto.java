@@ -3,6 +3,7 @@ package com.timerit.device;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -11,9 +12,9 @@ import java.util.Date;
 public class DeviceDto {
     @Data
     public static class Create {
-        @NotBlank
+        @NotNull
         private Date expired;
-        @NotBlank
+        @NotNull
         private Long ownerid;
     }
     @Data
@@ -27,7 +28,7 @@ public class DeviceDto {
 
     @Data
     public static class Update {
-        @NotBlank
+        @NotNull
         private Date expired;
     }
 }

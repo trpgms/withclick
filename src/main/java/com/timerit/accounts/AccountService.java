@@ -50,6 +50,7 @@ public class AccountService {
         account.setEmail(updateDto.getEmail());
         account.setStatus(updateDto.getStatus());
         account.setDescription(updateDto.getDescription());
+        account.setAdmin(updateDto.isAdmin());
         return repository.save(account);
     }
 

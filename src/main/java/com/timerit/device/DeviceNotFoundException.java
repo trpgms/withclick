@@ -5,12 +5,15 @@ package com.timerit.device;
  */
 public class DeviceNotFoundException extends RuntimeException{
     Long id;
-
+    String licencekey;
     public DeviceNotFoundException(Long id) {
         this.id = id;
     }
-
+    public DeviceNotFoundException(String licencekey) {
+        this.licencekey = licencekey;
+    }
     public Long getId() {
         return id;
     }
+    public String getLicencekey() { return licencekey;}
 }

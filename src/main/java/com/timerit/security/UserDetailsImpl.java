@@ -1,6 +1,7 @@
 package com.timerit.security;
 
 import com.timerit.accounts.Account;
+import com.timerit.device.Device;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -23,4 +24,5 @@ public class UserDetailsImpl extends User {
         }
         return authorities;
     }
+
 }
