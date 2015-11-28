@@ -26,7 +26,7 @@ public class Account {
 
     private String email;
 
-    private String desc;
+    private String description;
 
     private String status;
 

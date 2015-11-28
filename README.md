@@ -5,6 +5,9 @@ http://localhost:8080/swagger/index.html
 
 #withclick 기능
 
+#관리자계정
+admin / withclick
+
 ## 사용자
 1. 계정가입,사용자정보
 	필수[이메일,패스워드,개설일,상태],선택[연락처]

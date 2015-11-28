@@ -105,7 +105,7 @@ public class AccountControllerTest {
 
     private AccountDto.Create accountCreateDto() {
         AccountDto.Create createDto = new AccountDto.Create();
-        createDto.setUsername("whiteship");
+        createDto.setUsername("trpgms");
         createDto.setPassword("password");
         return createDto;
     }
@@ -127,7 +127,7 @@ public class AccountControllerTest {
         Account account = service.createAccount(createDto);
 
         AccountDto.Update updateDto = new AccountDto.Update();
-        updateDto.setEmail("keesun baik");
+        updateDto.setEmail("description");
         updateDto.setPassword("pass");
 
         ResultActions result = mockMvc.perform(put("/accounts/" + account.getId())
@@ -136,7 +136,7 @@ public class AccountControllerTest {
 
         result.andDo(print());
         result.andExpect(status().isOk());
-        result.andExpect(jsonPath("$.fullName", is("keesun baik")));
+        result.andExpect(jsonPath("$.fullName", is("description")));
     }
 
     @Test

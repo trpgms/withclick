@@ -48,7 +48,7 @@ public class AccountService {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setEmail(updateDto.getEmail());
         account.setStatus(updateDto.getStatus());
-        account.setDesc(updateDto.getDesc());
+        account.setDescription(updateDto.getDescription());
         return repository.save(account);
     }
 
