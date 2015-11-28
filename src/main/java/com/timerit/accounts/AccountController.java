@@ -36,7 +36,6 @@ public class AccountController {
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.setMessage("파라미터 오류");
             errorResponse.setCode("bad.request");
-            // TODO BindingResult 안에 들어있는 에러 정보 사용하기.
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 

@@ -18,8 +18,11 @@ public class AccountDto {
         private String username;
 
         @NotBlank
-        @Size(min = 5)
+        @Size(min = 4)
         private String password;
+
+        private String email;
+        private String description;
     }
 
     @Data

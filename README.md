@@ -1,5 +1,9 @@
 ##
 
+## velocity 사용
+resources/templates
+
+
 ## API 문서
 http://localhost:8080/swagger/index.html
 

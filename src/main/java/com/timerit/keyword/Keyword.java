@@ -26,7 +26,7 @@ public class Keyword {
 
     private Integer termsec;
 
-    private String desc;
+    private String description;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="deviceid")

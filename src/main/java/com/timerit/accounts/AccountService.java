@@ -40,6 +40,7 @@ public class AccountService {
         Date now = new Date();
         account.setJoined(now);
         account.setUpdated(now);
+        account.setAdmin(false);
         return repository.save(account);
     }
 

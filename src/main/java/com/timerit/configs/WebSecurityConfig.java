@@ -30,12 +30,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.httpBasic();
-
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/accounts/**").hasRole("USER")
-                .antMatchers(HttpMethod.DELETE, "/accounts/**").hasRole("USER")
-                .anyRequest().permitAll();
+                    .antMatchers(HttpMethod.POST, "/accounts/**").permitAll()
+                    .antMatchers("/swagger/**").permitAll()
+                    .antMatchers("/api-docs/**").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
+                    .and()
+                .logout()
+                    .permitAll();
 
     }
 
