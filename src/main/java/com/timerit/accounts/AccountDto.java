@@ -34,6 +34,8 @@ public class AccountDto {
     @Data
     public static class Update {
         private String password;
-        private String fullName;
+        private String desc;
+        private String status;
+        private String email;
     }
 }

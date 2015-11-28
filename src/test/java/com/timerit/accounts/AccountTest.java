@@ -10,9 +10,9 @@ public class AccountTest {
     @Test
     public void getterSetter() {
         Account account = new Account();
-        account.setUsername("whiteship");
+        account.setUsername("trpgms");
         account.setPassword("password");
-        assertThat(account.getUsername(), is("whiteship"));
+        assertThat(account.getUsername(), is("trpgms"));
     }
 
 }

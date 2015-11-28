@@ -46,7 +46,9 @@ public class AccountService {
     public Account updateAccount(Long id, AccountDto.Update updateDto) {
         Account account = getAccount(id);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
-        account.setFullName(updateDto.getFullName());
+        account.setEmail(updateDto.getEmail());
+        account.setStatus(updateDto.getStatus());
+        account.setDesc(updateDto.getDesc());
         return repository.save(account);
     }
 

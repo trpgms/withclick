@@ -56,7 +56,6 @@ public class AccountControllerTest {
                 .build();
     }
 
-    // TODO 서비스 호출에서 예외 상황을 비동기 콜백으로 처리하는 것도 해주세요. 예외 던지지 말고.
     @Test
     public void createAccount() throws Exception {
         AccountDto.Create creatDto = accountCreateDto();
@@ -67,7 +66,7 @@ public class AccountControllerTest {
 
         result.andDo(print());
         result.andExpect(status().isCreated());
-        result.andExpect(jsonPath("$.username", is("whiteship")));
+        result.andExpect(jsonPath("$.username", is("trpgms")));
 
         result = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -128,7 +127,7 @@ public class AccountControllerTest {
         Account account = service.createAccount(createDto);
 
         AccountDto.Update updateDto = new AccountDto.Update();
-        updateDto.setFullName("keesun baik");
+        updateDto.setEmail("keesun baik");
         updateDto.setPassword("pass");
 
         ResultActions result = mockMvc.perform(put("/accounts/" + account.getId())

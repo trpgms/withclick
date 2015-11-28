@@ -1,10 +1,12 @@
 package com.timerit.accounts;
 
+import com.timerit.device.Device;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author trpgms
@@ -24,7 +26,9 @@ public class Account {
 
     private String email;
 
-    private String fullName;
+    private String desc;
+
+    private String status;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date joined;
@@ -34,4 +38,6 @@ public class Account {
 
     private boolean admin;
 
+    @OneToMany(mappedBy="owner")
+    private List<Device> devices;
 }
