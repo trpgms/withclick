@@ -1,13 +1,12 @@
 package com.timerit.app;
 
 import com.timerit.accounts.AccountNotFoundException;
-import com.timerit.accounts.UserDuplicatedException;
+import com.timerit.authtoken.AuthTokenExpiredExcetion;
+import com.timerit.authtoken.AuthTokenNotFoundExcetion;
 import com.timerit.commons.ErrorResponse;
-import com.timerit.device.Device;
 import com.timerit.device.DeviceNotFoundException;
 import com.timerit.keyword.KeywordNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.logging.java.SimpleFormatter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -29,6 +28,15 @@ public class AppController {
 
     @Autowired
     private AppService service;
+
+    @RequestMapping(value = "/auth",method = POST)
+    public ResponseEntity openApp(@RequestBody @Valid AppDto.Auth dto, BindingResult result ) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(service.auth(dto),HttpStatus.OK);
+    }
+
 
     @RequestMapping(value = "/open",method = POST)
     public ResponseEntity openApp(@RequestBody @Valid AppDto.Open dto, BindingResult result ) {
@@ -70,6 +78,24 @@ public class AppController {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage("지정된 키워드가 없습니다.");
         errorResponse.setCode("no.keyword.exception");
+        return errorResponse;
+    }
+
+    @ExceptionHandler(AuthTokenNotFoundExcetion.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleAuthTokenNotFoundExcetion(AuthTokenNotFoundExcetion e) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("["+e.getTokenvalue()+"] 없는 토큰입니다.다시 인증해주세요.");
+        errorResponse.setCode("token.notfound.exception");
+        return errorResponse;
+    }
+
+    @ExceptionHandler(AuthTokenExpiredExcetion.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleAuthTokenExpiredExcetion(AuthTokenExpiredExcetion e) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("["+e.getTokenvalue()+"] 만료된 토큰입니다. 다시 인증해주세요.");
+        errorResponse.setCode("token.expired.exception");
         return errorResponse;
     }
 }

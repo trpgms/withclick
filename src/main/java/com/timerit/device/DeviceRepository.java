@@ -1,6 +1,8 @@
 package com.timerit.device;
 
 import com.timerit.accounts.Account;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -8,4 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface DeviceRepository extends JpaRepository<Device,Long> {
     Device findByOwnerAndLicencekey(Account owner, String licencekey);
+    Page<Device> findByOwnerOrderByExpiredDesc(Account account, Pageable pageable);
 }

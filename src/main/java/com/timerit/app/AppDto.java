@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class AppDto {
     @Data
-    public static class Open {
+    public static class Auth {
         @NotBlank
         @Size(min = 5)
         protected String username;
@@ -21,6 +21,18 @@ public class AppDto {
         @Size(min = 4)
         private String licencekey;
 
+    }
+
+    @Data
+    public static class AuthResult {
+        private String tokenvalue;
+        private Date expired;
+    }
+
+    @Data
+    public static class Open {
+        @NotBlank
+        private String tokenvalue;
         // 검색결과
         private Long keywordid;
         private String searchword;
@@ -33,13 +45,7 @@ public class AppDto {
 
     @Data
     public static class Result {
-        // account
-        private String username;
-        private String email;
-        private String status;
-        // device
-        private String licencekey;
-        private Date expired;
+
         // keyword
         private Long keywordid;
         private String searchword;

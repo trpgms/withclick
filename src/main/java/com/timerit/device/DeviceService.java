@@ -1,14 +1,20 @@
 package com.timerit.device;
 
+import com.timerit.accounts.Account;
 import com.timerit.accounts.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by trpgm on 2015-11-28.
@@ -36,6 +42,19 @@ public class DeviceService {
         device.setUpdated(now);
         return repository.save(device);
     }
+
+    public PageImpl<DeviceDto.Response> getDevices(Long ownerid, Pageable pageable) {
+        Account account = accountRepository.findOne(ownerid);
+        Page<Device> page = repository.findByOwnerOrderByExpiredDesc(account, pageable);
+        List<DeviceDto.Response> content = page.getContent().parallelStream()
+                .map(device -> modelMapper.map(device, DeviceDto.Response.class))
+                .collect(Collectors.toList());
+        for (DeviceDto.Response response : content) {
+            response.setOwnerid(ownerid);
+        }
+        return new PageImpl<>(content, pageable, page.getTotalElements());
+    }
+
     public Device getDevice(Long id) {
         Device device = repository.findOne(id);
         if(device == null) {

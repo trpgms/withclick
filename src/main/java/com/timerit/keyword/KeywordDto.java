@@ -42,7 +42,7 @@ public class KeywordDto {
 
         private String description;
 
-        private Device device;
+        private Long deviceid;
     }
 
     @Data

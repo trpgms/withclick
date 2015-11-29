@@ -5,6 +5,10 @@ import com.timerit.Search.SearchRepository;
 import com.timerit.accounts.Account;
 import com.timerit.accounts.AccountNotFoundException;
 import com.timerit.accounts.AccountRepository;
+import com.timerit.authtoken.AuthTokenExpiredExcetion;
+import com.timerit.authtoken.AuthTokenNotFoundExcetion;
+import com.timerit.authtoken.Authtoken;
+import com.timerit.authtoken.AuthtokenRepository;
 import com.timerit.device.Device;
 import com.timerit.device.DeviceNotFoundException;
 import com.timerit.device.DeviceRepository;
@@ -12,12 +16,16 @@ import com.timerit.keyword.Keyword;
 import com.timerit.keyword.KeywordNotFoundException;
 import com.timerit.keyword.KeywordRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.ByteBuffer;
+import java.util.Base64;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by trpgm on 2015-11-28.
@@ -39,9 +47,11 @@ public class AppService {
     private SearchRepository searchRepository;
 
     @Autowired
+    private AuthtokenRepository authtokenRepository;
+    @Autowired
     private ModelMapper modelMapper;
 
-    public AppDto.Result open(AppDto.Open dto) {
+    public AppDto.AuthResult auth(AppDto.Auth dto) {
         Account account = accountRepository.findByUsername(dto.getUsername());
         if (account == null) {
             throw new AccountNotFoundException(dto.getUsername());
@@ -51,8 +61,44 @@ public class AppService {
             throw new DeviceNotFoundException(dto.getLicencekey());
         }
         Date now = new Date();
-        if(now.before(device.getExpired())) {
+        if(now.after(device.getExpired())) {
             throw new LicenceExpiredException(device.getExpired(),dto.getLicencekey());
+        }
+
+        UUID uuid = UUID.randomUUID();
+        ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
+        bb.putLong(uuid.getMostSignificantBits());
+        bb.putLong(uuid.getLeastSignificantBits());
+
+        Authtoken authtoken = new Authtoken();
+        authtoken.setTokenvalue(Base64.getEncoder().encodeToString(bb.array()));
+        authtoken.setRegisted(now);
+        authtoken.setDevice(device);
+        DateTime expired = new DateTime(now);
+        authtoken.setExpired(expired.plusHours(1).toDate());
+        Authtoken result = authtokenRepository.save(authtoken);
+
+        AppDto.AuthResult authResult = new AppDto.AuthResult();
+        authResult.setTokenvalue(result.getTokenvalue());
+        authResult.setExpired(result.getExpired());
+
+        return authResult;
+    }
+    public AppDto.Result open(AppDto.Open dto) {
+        Authtoken authtoken = authtokenRepository.findByTokenvalue(dto.getTokenvalue());
+        if(authtoken == null) {
+            throw new AuthTokenNotFoundExcetion(dto.getTokenvalue());
+        }
+        Device device = authtoken.getDevice();
+        if(device == null) {
+            throw new DeviceNotFoundException(device.getLicencekey());
+        }
+        Date now = new Date();
+        if(now.after(device.getExpired())) {
+            throw new LicenceExpiredException(device.getExpired(),device.getLicencekey());
+        }
+        if(now.after(authtoken.getExpired())) {
+            throw new AuthTokenExpiredExcetion(dto.getTokenvalue());
         }
         // 결과저장
         // 검색결과
@@ -88,14 +134,7 @@ public class AppService {
 
         AppDto.Result result = new AppDto.Result();
 
-        result.setUsername(account.getUsername());
-        result.setStatus(account.getStatus());
-        result.setEmail(account.getEmail());
-
-        result.setExpired(device.getExpired());
-        result.setLicencekey(device.getLicencekey());
-
-
+        result.setKeywordid(keyword.getId());
         result.setSearchword(keyword.getSearchword());
         result.setUrl(keyword.getUrl());
         result.setWaitopen(keyword.getWaitopen());

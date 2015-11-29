@@ -1,7 +1,6 @@
 package com.timerit.device;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -21,6 +20,7 @@ public class DeviceDto {
     public static class Response {
         private Long id;
         private String licencekey;
+        private Long ownerid;
         private Date expired;
         private Date registed;
         private Date updated;

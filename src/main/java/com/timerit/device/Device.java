@@ -3,9 +3,11 @@ package com.timerit.device;
 import com.timerit.Search.Search;
 import com.timerit.accounts.Account;
 
+import com.timerit.authtoken.Authtoken;
 import com.timerit.keyword.Keyword;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -43,4 +45,5 @@ public class Device {
 
     @OneToMany(mappedBy="device")
     private List<Search> searches;
+
 }

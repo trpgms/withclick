@@ -33,9 +33,6 @@ public class DeviceController {
     private DeviceService service;
 
     @Autowired
-    private DeviceRepository repository;
-
-    @Autowired
     private ModelMapper modelMapper;
 
     @RequestMapping(value = "/devices",method = POST)
@@ -47,13 +44,9 @@ public class DeviceController {
         return new ResponseEntity<>(modelMapper.map(device, DeviceDto.Response.class),HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/devices",method = GET)
-    public PageImpl<DeviceDto.Response> getDevices(Pageable pageable) {
-        Page<Device> page = repository.findAll(pageable);
-        List<DeviceDto.Response> content = page.getContent().parallelStream()
-                .map(device -> modelMapper.map(device, DeviceDto.Response.class))
-                .collect(Collectors.toList());
-        return new PageImpl<>(content, pageable, page.getTotalElements());
+    @RequestMapping(value = "/devices/{ownerid}",method = GET)
+    public PageImpl<DeviceDto.Response> getDevices(@PathVariable Long ownerid, Pageable pageable) {
+        return service.getDevices(ownerid,pageable);
     }
 
     @RequestMapping(value = "/device/{id}",method = GET)
