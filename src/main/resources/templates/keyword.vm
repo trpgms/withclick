@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Withclick</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <style>
+        html, body {height: 100%;}
+        .vertical-center {min-height: 100%;min-height: 100vh;display: -webkit-box;display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-align : center;
+            -webkit-align-items : center;
+            -moz-box-align : center;
+            -ms-flex-align : center;
+            align-items : center;
+            width: 100%;
+            -webkit-box-pack : center;
+            -moz-box-pack : center;
+            -ms-flex-pack : center;
+            -webkit-justify-content : center;
+            justify-content : center;
+            margin-bottom: 0;
+        }
+
+        .container {
+
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#goHomeBtn').click(function(){location.href= "/account";});
+            $('#goLogoutBtn').click(function(){location.href= "/logout";});
+
+            var deviceId = document.URL.split("/").pop(-1);
+
+            $('#inputDeviceId').val(deviceId);
+
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/api/keywords/" + deviceId,
+                contentType: "application/json; charset=UTF-8",
+                data: {},
+                success: function(res){
+                    console.log(res);
+                    var str = "";
+                    $.each(res.content, function(key, value){
+                        str +=
+                                '<tr>' +
+                                '<th scope="row">' + (key + 1) + '</th>' +
+                                '<td>'+ value.id +'</td>' +
+                                '<td>'+ value.searchword +'</td>' +
+                                '<td>'+ value.url +'</td>' +
+                                '<td>'+ value.deviceid +'</td>' +
+                                '<td>'+ value.description +'</td>' +
+                                '</tr>';
+                    });
+                    $('#deviceList').append(str);
+                }
+            });
+
+            $('#addDevice').click(function(){
+                var device = {
+                    searchword: $('#inputKeyword').val(),
+                    url: $('#inputUrl').val(),
+                    waitopen: $('#inputWaitOpen').val(),
+                    waitsearch: $('#inputWaitSearch').val(),
+                    description: $('#inputDescription').val(),
+                    deviceid: $('#inputDeviceId').val()
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/keywords",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(device),
+                    success: function(res){
+                        location.href = "/keyword/" + deviceId;
+                    }
+                });
+            });
+        });
+
+    </script>
+</head>
+<body>
+
+<button type="button" class="btn btn-info" id="goHomeBtn">Home</button>
+<button type="button" class="btn btn-danger" id="goLogoutBtn">Logout</button>
+
+<h3>Keyword Add Form</h3>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label for="inputKeyword" class="col-sm-2 control-label">Keyword</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputKeyword" placeholder="keyword">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputUrl" class="col-sm-2 control-label">URL</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputUrl" placeholder="url" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputWaitOpen" class="col-sm-2 control-label">Wait Open</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputWaitOpen" placeholder="waitopen" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputWaitSearch" class="col-sm-2 control-label">Wait Search</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputWaitSearch" placeholder="waitsearch" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputDescription" class="col-sm-2 control-label">Description</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputDescription" placeholder="description" value="">
+        </div>
+    </div>
+    <input type="hidden" id="inputDeviceId" value=""></input>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="button" class="btn btn-success" id="addDevice">Add</button>
+        </div>
+    </div>
+</form>
+
+<h3>Keyword List</h3>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Id</th>
+        <th>Keyword</th>
+        <th>Url</th>
+        <th>Device Id</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody id="deviceList">
+    </tbody>
+</table>
+
+
+</body>
+</html>

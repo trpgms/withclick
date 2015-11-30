@@ -6,22 +6,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-        </sourceRoots>
-      </configuration>
-    </facet>
-    <facet type="Spring" name="Spring">
-      <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/java/com/timerit/configs/WebSecurityConfig.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/timerit/configs/SpringConfig.java</file>
-          <file>jar://$MAVEN_REPOSITORY$/com/mangofactory/swagger-models/1.0.2/swagger-models-1.0.2.jar!/com/mangofactory/swagger/models/configuration/SwaggerModelsConfiguration.class</file>
-          <file>file://$MAVEN_REPOSITORY$/com/mangofactory/swagger-models/1.0.2/swagger-models-1.0.2.jar</file>
-          <file>jar://$MAVEN_REPOSITORY$/com/mangofactory/swagger-springmvc/1.0.2/swagger-springmvc-1.0.2.jar!/com/mangofactory/swagger/configuration/SpringSwaggerConfig.class</file>
-          <file>file://$MAVEN_REPOSITORY$/com/mangofactory/swagger-springmvc/1.0.2/swagger-springmvc-1.0.2.jar</file>
-        </fileset>
       </configuration>
     </facet>
   </component>
@@ -31,8 +15,6 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

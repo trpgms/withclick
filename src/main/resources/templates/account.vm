@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Withclick</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <style>
+        html, body {height: 100%;}
+        .vertical-center {min-height: 100%;min-height: 100vh;display: -webkit-box;display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-align : center;
+            -webkit-align-items : center;
+            -moz-box-align : center;
+            -ms-flex-align : center;
+            align-items : center;
+            width: 100%;
+            -webkit-box-pack : center;
+            -moz-box-pack : center;
+            -ms-flex-pack : center;
+            -webkit-justify-content : center;
+            justify-content : center;
+            margin-bottom: 0;
+        }
+
+        .container {
+
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#goHomeBtn').click(function(){location.href= "/account";});
+            $('#goLogoutBtn').click(function(){location.href= "/logout";});
+
+            // 화면 첫 페이지는 account list...
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/api/accounts",
+                contentType: "application/json; charset=UTF-8",
+                data: {},
+                success: function(res){
+                    var str = "";
+                    $.each(res.content, function(key, value){
+                        str +=
+                        '<tr>' +
+                            '<th scope="row">' + (key + 1) + '</th>' +
+                            '<td>'+ value.id +'</td>' +
+                            '<td>'+ value.username +'</td>' +
+                            '<td>'+ value.email +'</td>' +
+                            '<td>'+ value.admin +'</td>' +
+                            '<td><a href="/device/'+ value.id +'"><button type="button" class="btn btn-primary">Go to device infomation</button></a></td>' +
+                        '</tr>';
+                    });
+                    $('#accountList').append(str);
+                }
+            });
+
+            // account 등록
+            $('#addAccount').click(function(){
+                var account = {
+                    username: $('#inputUserName').val(),
+                    password: $('#inputPassword').val(),
+                    email: $('#inputEmail').val(),
+                    description: $('#inputDescription').val()
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/accounts",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(account),
+                    success: function(res){
+                        location.href = "/account";
+                    }
+                });
+            });
+        });
+
+    </script>
+</head>
+<body>
+
+<button type="button" class="btn btn-info" id="goHomeBtn">Home</button>
+<button type="button" class="btn btn-danger" id="goLogoutBtn">Logout</button>
+
+<h3>Account Add Form</h3>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label for="inputUserName" class="col-sm-2 control-label">User Name</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputUserName" placeholder="username">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" id="inputPassword" placeholder="password">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputEmail" class="col-sm-2 control-label">E-Mail</label>
+        <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputEmail" placeholder="email">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputDescription" class="col-sm-2 control-label">Description</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputDescription" placeholder="description">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="button" class="btn btn-success" id="addAccount">Add</button>
+        </div>
+    </div>
+</form>
+
+<h3>Account List</h3>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Id</th>
+        <th>User Name</th>
+        <th>E-Mail</th>
+        <th>Admin Yes/No</th>
+        <th>Device Infomation</th>
+    </tr>
+    </thead>
+    <tbody id="accountList">
+    </tbody>
+</table>
+
+
+</body>
+</html>
